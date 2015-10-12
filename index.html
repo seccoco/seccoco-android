@@ -38,7 +38,7 @@
 <p>Internally Seccoco will at first launch of the application create a keypair and store the private key securily. It then creates a random passphrase and stores this encrypted with the public key. On subsequent starts of the application it will then access the private key and decrypt the passphrase.</p>
 
 <h2>
-<a id="symmetric-encryption" class="anchor" href="#symmetric-encryption" aria-hidden="true"><span class="octicon octicon-link"></span></a>Symmetric encryption</h2>
+<a id="symmetric-crypto" class="anchor" href="#symmetric-crypto" aria-hidden="true"><span class="octicon octicon-link"></span></a>Symmetric crypto</h2>
 
 <p>You don't need to provide a passphrase or IV. Seccoco internally uses the auto generated passphrase with an IV for it.</p>
 
@@ -47,7 +47,7 @@ byte[] decrypted = seccoco.crypto().decrypt(encrypted);
 </code></pre>
 
 <h2>
-<a id="hybrid-encryption" class="anchor" href="#hybrid-encryption" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hybrid encryption</h2>
+<a id="hybrid-crypto" class="anchor" href="#hybrid-crypto" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hybrid crypto</h2>
 
 <h3>
 <a id="encryption" class="anchor" href="#encryption" aria-hidden="true"><span class="octicon octicon-link"></span></a>Encryption</h3>
@@ -67,8 +67,10 @@ EncryptedMessage encryptedMessage = seccoco.crypto().encrypt(plainText,identity)
 
 <p>If you received an EncryptedMessage you can decrypt it again without the need of additional parameters.</p>
 
-<pre><code>byte[] decrypted = seccoco.crypto().decrypt(encrypted,encryptedMessage);
+<pre><code>byte[] decrypted = seccoco.crypto().decrypt(encryptedMessage);
 </code></pre>
+
+<p>Contact us for questions: <a href="mailto:info@seccoco.com">info@seccoco.com</a></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/seccoco/seccoco-android">Seccoco</a> is maintained by <a href="https://github.com/seccoco">seccoco</a>.</span>
