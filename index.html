@@ -20,15 +20,15 @@
 
     <section class="main-content">
       <h1>
-<a id="what-is-seccoco" class="anchor" href="#what-is-seccoco" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is Seccoco?</h1>
+<a id="what-is-seccoco" class="anchor" href="#what-is-seccoco" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is Seccoco?</h1>
 
 <p>Seccoco is an Android library which offers you to add encryption to your application with just a few lines of code. Seccoco is designed with simplicity in mind. Instead of giving you gazillions of different configurations it provides you sensible defaults and abstracts away the complexity of cryptography. Under the hood it uses state of the art crypto algorithms.</p>
 
 <h1>
-<a id="how-to-use-seccoco" class="anchor" href="#how-to-use-seccoco" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to use Seccoco?</h1>
+<a id="how-to-use-seccoco" class="anchor" href="#how-to-use-seccoco" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use Seccoco?</h1>
 
 <h2>
-<a id="initialize" class="anchor" href="#initialize" aria-hidden="true"><span class="octicon octicon-link"></span></a>Initialize</h2>
+<a id="initialize" class="anchor" href="#initialize" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Initialize</h2>
 
 <p>Create Seccoco directly in your Android Application class and make this object available to other parts of your application e.g. via dependency injection.</p>
 
@@ -38,7 +38,7 @@
 <p>Internally Seccoco will at first launch of the application create a keypair and store the private key securily. It then creates a random passphrase and stores this encrypted with the public key. On subsequent starts of the application it will then access the private key and decrypt the passphrase.</p>
 
 <h2>
-<a id="symmetric-crypto" class="anchor" href="#symmetric-crypto" aria-hidden="true"><span class="octicon octicon-link"></span></a>Symmetric crypto</h2>
+<a id="symmetric-crypto" class="anchor" href="#symmetric-crypto" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Symmetric crypto</h2>
 
 <p>You don't need to provide a passphrase or IV. Seccoco internally uses the auto generated passphrase with an IV for it.</p>
 
@@ -47,25 +47,54 @@ byte[] decrypted = seccoco.crypto().decrypt(encrypted);
 </code></pre>
 
 <h2>
-<a id="hybrid-crypto" class="anchor" href="#hybrid-crypto" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hybrid crypto</h2>
+<a id="hybrid-crypto" class="anchor" href="#hybrid-crypto" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hybrid crypto</h2>
 
 <h3>
-<a id="encryption" class="anchor" href="#encryption" aria-hidden="true"><span class="octicon octicon-link"></span></a>Encryption</h3>
+<a id="encryption" class="anchor" href="#encryption" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Encryption</h3>
 
-<p>If you want to encrypt data for somebody else, you just need to have the certificate and pass this along the plaintext data.</p>
+<h4>
+<a id="for-yourself" class="anchor" href="#for-yourself" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For yourself</h4>
 
-<pre><code>String certificate = "--------BEGIN CERTIFICATE----- (truncated) -----END CERTIFICATE-----";
-Identity identity = new Identity(certificate);
-byte[] plainText =  "Hello from Seccoco".getBytes()
+<p>You can encrypt the data so that it can only be decrypted from your specific Seccoco configuration:</p>
+
+<pre><code>byte[] plainText =  "My very own secret data".getBytes();
+EncryptedMessage encryptedMessage = seccoco.crypto().encryptForSelf(plainText);
+</code></pre>
+
+<h4>
+<a id="for-the-trusted-recipient" class="anchor" href="#for-the-trusted-recipient" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For the trusted recipient</h4>
+
+<p>You can include one certificate which is then trusted by default. 
+In order to do this, you need to put this certificate in PEM format in the asset folder and name it <code>seccoco-trustedrecipient.pem</code>.</p>
+
+<p>If this file is found, you can encrypt the data for this recipient:</p>
+
+<pre><code>byte[] plainText = "Hi there, I trust you out of the box!".getBytes();
+EncryptedMessage encryptedMessage = seccoco.crypto().encryptForTrustedRecipient(plainText);
+</code></pre>
+
+<h4>
+<a id="for-some-other-recipient" class="anchor" href="#for-some-other-recipient" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For some other recipient</h4>
+
+<p>If you want to send an encrypted message to somebody else, all you need to have is the certificate in PEM format.</p>
+
+<p>First you need to extract the <code>Identity</code> object from the PEM file. This object holds the certificate as well as the fingerprint of the certificate.</p>
+
+<pre><code>Identity identity = seccoco.identities().extractFromPem(new FileReader(new File("recipient.pem")));
+</code></pre>
+
+<p>Then you can encrypt the data:</p>
+
+<pre><code>byte[] plainText = "Hi there, thanks for sending me your certificate!".getBytes();
 EncryptedMessage encryptedMessage = seccoco.crypto().encrypt(plainText,identity);
 </code></pre>
 
-<p>The EncryptedMessage will automatically have your certificate attached and also a signature of the content, so that the recipient of this message can validate if you are the one who sent this message.</p>
+<p>In all cases the encrypted message will have your certificate attached and also a signature of the content, so that the recipient of this message can validate if you are the one who sent this message.</p>
 
 <h3>
-<a id="decryption" class="anchor" href="#decryption" aria-hidden="true"><span class="octicon octicon-link"></span></a>Decryption</h3>
+<a id="decryption" class="anchor" href="#decryption" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Decryption</h3>
 
-<p>If you received an EncryptedMessage you can decrypt it again without the need of additional parameters.</p>
+<p>If you received an encrypted message you can decrypt it again without the need of additional parameters.</p>
 
 <pre><code>byte[] decrypted = seccoco.crypto().decrypt(encryptedMessage);
 </code></pre>
