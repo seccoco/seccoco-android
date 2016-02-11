@@ -1,0 +1,100 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "https://oss.sonatype.org/content/groups/public"
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.6'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
+        classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.12.1"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:1.2"
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        mavenLocal()
+        mavenCentral()
+    }
+
+}
+
+apply plugin: 'android-sdk-manager'
+apply plugin: 'com.android.library'
+apply plugin: 'groovyx.grooid.groovy-android'
+apply plugin: "com.github.hierynomus.license"
+apply plugin: "org.sonarqube"
+
+def version = "1.0.0-SNAPSHOT"
+
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "Seccoco Android"
+        property "sonar.version", version
+        property "sonar.sources", "./src/main/java"
+        property "sonar.tests", "./src/test/groovy"
+        property "sonar.java.binaries", "./build/intermediates/classes/release"
+        property "sonar.junit.reportsPath", "./build/test-results/release"
+        property "sonar.android.lint.report", "./build/outputs/lint-results.xml"
+        property "sonar.verbose", "false"
+    }
+}
+
+license {
+    license {
+        header = file('HEADER.txt')
+        skipExistingHeaders = true
+        ignoreFailures = false
+    }
+}
+
+android {
+
+    compileSdkVersion 23
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 15
+        versionCode 1
+        versionName version
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'de.petendi:commons-crypto:1.0.0-SNAPSHOT'
+    compile 'org.cryptonode.jncryptor:jncryptor:1.2.0'
+    compile 'commons-codec:commons-codec:1.10'
+    compile 'org.apache.commons:commons-lang3:3.3.2'
+    compile 'commons-io:commons-io:2.4'
+    compile 'com.madgag.spongycastle:pkix:1.51.0.0'
+    compile 'com.madgag.spongycastle:core:1.51.0.0'
+    testCompile ('org.robospock:robospock:1.0.0') {
+        exclude group:'org.bouncycastle',module:'bcprov-jdk16'
+    }
+    testCompile 'cglib:cglib-nodep:2.2'
+    testCompile 'com.android.support:support-v4:23.1.1'
+    testCompile 'org.mockito:mockito-all:1.9.5'
+}
+
