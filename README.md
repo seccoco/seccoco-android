@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/p-acs/seccoco-android.svg?branch=master)](https://travis-ci.org/p-acs/seccoco-android)
+
 # What is Seccoco?
 
 Seccoco is an Android library which offers you to add encryption to your application with just a few lines of code. Seccoco is designed with simplicity in mind. Instead of giving you gazillions of different configurations it provides you sensible defaults and abstracts away the complexity of cryptography. Under the hood it uses state of the art crypto algorithms.
