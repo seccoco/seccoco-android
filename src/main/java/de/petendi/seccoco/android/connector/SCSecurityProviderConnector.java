@@ -39,6 +39,7 @@ import org.spongycastle.operator.ContentSigner;
 import org.spongycastle.operator.DigestCalculator;
 import org.spongycastle.operator.bc.BcDigestCalculatorProvider;
 import org.spongycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.spongycastle.util.encoders.Base64;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -209,6 +210,16 @@ public class SCSecurityProviderConnector implements SecurityProviderConnector {
         }
         keyGenerator.init(outputKeyLength, secureRandom);
         return keyGenerator.generateKey();
+    }
+
+    @Override
+    public byte[] base64Encode(byte[] toEncode) {
+        return Base64.encode(toEncode);
+    }
+
+    @Override
+    public byte[] base64Decode(byte[] toDecode) {
+        return Base64.decode(toDecode);
     }
 
 
