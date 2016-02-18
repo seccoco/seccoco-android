@@ -32,7 +32,7 @@ class DefaultIdentitiesTest extends Specification {
         certificates.create("test-user","test-password".toCharArray(),pemWriter,new ByteArrayOutputStream());
         String certificateString = pemWriter.toString();
         when:
-        DefaultIdentities defaultIdentities = new DefaultIdentities(securityProviderConnector);
+        DefaultIdentities defaultIdentities = new DefaultIdentities(securityProviderConnector,Mock(Identity));
         Identity extractedIdentity = defaultIdentities.extractFromPem(new StringReader(certificateString));
         then:
         X509Certificate extractedCertificate = securityProviderConnector.extractCertificate(new StringReader(certificateString));
@@ -44,7 +44,7 @@ class DefaultIdentitiesTest extends Specification {
         String certificateString = "---BEGIN CERTIFICATE oh well this is broken END CERTIFICATE---";
         when:
         SCSecurityProviderConnector securityProviderConnector = new SCSecurityProviderConnector();
-        DefaultIdentities defaultIdentities = new DefaultIdentities(securityProviderConnector);
+        DefaultIdentities defaultIdentities = new DefaultIdentities(securityProviderConnector,Mock(Identity));
         defaultIdentities.extractFromPem(new StringReader(certificateString));
         then:
         thrown IllegalArgumentException;

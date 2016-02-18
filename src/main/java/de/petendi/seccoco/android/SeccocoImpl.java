@@ -299,7 +299,7 @@ class SeccocoImpl implements Seccoco {
 
     @Override
     public Identities identities() {
-        return new DefaultIdentities(new SCSecurityProviderConnector());
+        return new DefaultIdentities(new SCSecurityProviderConnector(), token.getIdentity());
     }
 
     @Override
