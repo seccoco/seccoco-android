@@ -56,7 +56,6 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.security.spec.ECGenParameterSpec;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -175,27 +174,24 @@ public class SCSecurityProviderConnector implements SecurityProviderConnector {
 
     @Override
     public String getCryptoAlgorithm() {
-        return "ECIESwithAES/DHAES/PKCS7Padding";
+        return "RSA/ECB/PKCS1Padding";
     }
 
     @Override
     public String getSignAlgorithm() {
-        return "SHA1WITHCVC-ECDSA";
+        return "SHA1WithRSA";
     }
 
     @Override
     public KeyPair generateKeyPair() {
-
         try {
-            ECGenParameterSpec ecParamSpec = new ECGenParameterSpec("brainpoolp512t1");
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDH", getProviderName());
-            keyPairGenerator.initialize(ecParamSpec, new SecureRandom());
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator
+                    .getInstance("RSA");
+            keyPairGenerator.initialize(2048);
             return keyPairGenerator.generateKeyPair();
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException(e);
         }
-
-
     }
 
     @Override

@@ -15,10 +15,6 @@
  */
 package de.petendi.seccoco.android.connector;
 
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-
 public class AndroidSecurityProviderConnector extends SCSecurityProviderConnector {
 
 
@@ -27,26 +23,4 @@ public class AndroidSecurityProviderConnector extends SCSecurityProviderConnecto
         return "AndroidOpenSSL";
     }
 
-    @Override
-    public String getCryptoAlgorithm() {
-        return "RSA/ECB/PKCS1Padding";
-    }
-
-    @Override
-    public String getSignAlgorithm() {
-        return "SHA1WithRSA";
-    }
-
-    @Override
-    public KeyPair generateKeyPair() {
-        try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator
-                    .getInstance("RSA");
-            keyPairGenerator.initialize(2048);
-            return keyPairGenerator.generateKeyPair();
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(e);
-        }
-
-    }
 }
