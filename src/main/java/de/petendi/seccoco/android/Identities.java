@@ -22,5 +22,6 @@ import de.petendi.seccoco.android.model.Identity;
 public interface Identities {
 
     Identity extractFromPem(Reader pemReader);
+    Identity getOwnIdentity();
 
 }

@@ -27,9 +27,11 @@ import de.petendi.seccoco.android.model.Identity;
 class DefaultIdentities implements Identities {
 
     private final SCSecurityProviderConnector connector;
+    private final Identity ownIdentity;
 
-    DefaultIdentities(SCSecurityProviderConnector connector) {
+    DefaultIdentities(SCSecurityProviderConnector connector, Identity ownIdentity) {
         this.connector = connector;
+        this.ownIdentity = ownIdentity;
     }
 
     @Override
@@ -41,5 +43,9 @@ class DefaultIdentities implements Identities {
         } catch (Exception e) {
             throw new IllegalArgumentException("could not extract certificate",e);
         }
+    }
+
+    public Identity getOwnIdentity() {
+        return ownIdentity;
     }
 }
