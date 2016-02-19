@@ -77,7 +77,7 @@ class DefaultCrypto implements Crypto {
     @Override
     public EncryptedMessage encryptForTrustedRecipient(byte[] message) {
         if(NULL_IDENTITY==serverIdentity) {
-            throw new IllegalStateException("no server identity added");
+            throw new IllegalStateException("no trusted recipient added");
         } else {
             return encrypt(message,serverIdentity);
         }
@@ -87,15 +87,16 @@ class DefaultCrypto implements Crypto {
     public EncryptedMessage encrypt(byte[] message, Identity identity) {
         HybridCrypto hybridCrypto = new HybridCrypto(createSecurityProviderBridge());
         hybridCrypto.addRecipient(identity.getFingerPrint(), new StringReader(identity.getCertificate()));
+        HybridEncrypted encrypted;
         if (token instanceof PKCS12Token) {
             PKCS12Token pkcs12Token = (PKCS12Token) token;
-            HybridEncrypted encrypted = hybridCrypto.build(message, pkcs12Token.getPin(), new ByteArrayInputStream(pkcs12Token.getPkcs12()));
-            return toEncryptedMessage(encrypted);
+            encrypted = hybridCrypto.build(message, pkcs12Token.getPin(), new ByteArrayInputStream(pkcs12Token.getPkcs12()));
         } else {
             AndroidKeyStoreToken androidKeyStoreToken = (AndroidKeyStoreToken) token;
-            HybridEncrypted encrypted = hybridCrypto.build(message, androidKeyStoreToken.getPrivateKey());
-            return toEncryptedMessage(encrypted);
+            encrypted = hybridCrypto.build(message, androidKeyStoreToken.getPrivateKey());
         }
+        encrypted.getCertificates().put(ownIdentity.getFingerPrint(),ownIdentity.getCertificate());
+        return toEncryptedMessage(encrypted);
     }
 
     @Override
