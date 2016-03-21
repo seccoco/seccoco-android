@@ -4,6 +4,26 @@
 
 Seccoco is an Android library which offers you to add encryption to your application with just a few lines of code. Seccoco is designed with simplicity in mind. Instead of giving you gazillions of different configurations it provides you sensible defaults and abstracts away the complexity of cryptography. Under the hood it uses state of the art crypto algorithms.
 
+# How to get Seccoco?
+
+Fetch via Maven:
+
+```xml
+<dependency>
+  <groupId>de.petendi</groupId>
+  <artifactId>seccoco-android</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+Or Gradle:
+
+```groovy
+compile 'de.petendi:seccoco-android:1.0.0'
+```
+
+Snapshots of the development version are available in [Sonatype's snapshots repository][snap].
+
+
 # How to use Seccoco?
 
 ## Initialize
@@ -67,3 +87,5 @@ If you received an encrypted message you can decrypt it again without the need o
     byte[] decrypted = seccoco.crypto().decrypt(encryptedMessage);
 
 Contact us for questions: [info@seccoco.com](mailto:info@seccoco.com)
+
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/
