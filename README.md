@@ -40,11 +40,11 @@ You don't need to provide a passphrase or IV. Seccoco internally uses the auto g
     byte[] encrypted = seccoco.crypto().encrypt("Hello from Seccoco".getBytes());
     byte[] decrypted = seccoco.crypto().decrypt(encrypted);
 
-##Hybrid crypto
+## Hybrid crypto
 
-###Encryption
+### Encryption
 
-####For yourself
+#### For yourself
 
 You can encrypt the data so that it can only be decrypted from your specific Seccoco configuration:
 
@@ -53,7 +53,7 @@ You can encrypt the data so that it can only be decrypted from your specific Sec
     EncryptedMessage encryptedMessage = seccoco.crypto().encryptForSelf(plainText);
 
 
-####For the trusted recipient
+#### For the trusted recipient
 
 You can include one certificate which is then trusted by default. 
 In order to do this, you need to put this certificate in PEM format in the asset folder and name it ```seccoco-trustedrecipient.pem```.
@@ -63,7 +63,7 @@ If this file is found, you can encrypt the data for this recipient:
     byte[] plainText = "Hi there, I trust you out of the box!".getBytes();
     EncryptedMessage encryptedMessage = seccoco.crypto().encryptForTrustedRecipient(plainText);
     
-####For some other recipient
+#### For some other recipient
 
 If you want to send an encrypted message to somebody else, all you need to have is the certificate in PEM format.
 
@@ -80,7 +80,7 @@ Then you can encrypt the data:
 In all cases the encrypted message will have your certificate attached and also a signature of the content, so that the recipient of this message can validate if you are the one who sent this message.
 
 
-###Decryption
+### Decryption
 
 If you received an encrypted message you can decrypt it again without the need of additional parameters.
     
