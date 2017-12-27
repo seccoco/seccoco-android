@@ -47,7 +47,8 @@ class SeccocoImpl implements Seccoco {
     private static class InitializationResult {
         enum Type {
             P12,
-            ANDROID_KEYSTORE
+            ANDROID_KEYSTORE,
+            ANDROID_API23
         }
 
         private Type type;
@@ -154,7 +155,12 @@ class SeccocoImpl implements Seccoco {
         InitializationResult result = new InitializationResult();
         result.setVersion(1);
         if (keyStoreAvailable) {
-            result.setType(InitializationResult.Type.ANDROID_KEYSTORE);
+            if(android.os.Build.VERSION.SDK_INT > 22) {
+                result.setType(InitializationResult.Type.ANDROID_API23);
+            } else {
+                result.setType(InitializationResult.Type.ANDROID_KEYSTORE);
+            }
+
         } else {
             if(NULL_ROOT_PASSWORD==rootPassword) {
                 throw new IllegalStateException("legacy support disabled");
@@ -182,6 +188,9 @@ class SeccocoImpl implements Seccoco {
                 break;
             case ANDROID_KEYSTORE:
                 configurator = new AndroidKeyStoreConfigurator();
+                break;
+            case ANDROID_API23:
+                configurator = new AndroidAPI23Configurator(dataDirectory);
                 break;
             default:
                 throw new IllegalStateException("unhandled case: " + initializationResult.getType());
