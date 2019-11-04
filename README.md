@@ -86,6 +86,5 @@ If you received an encrypted message you can decrypt it again without the need o
     
     byte[] decrypted = seccoco.crypto().decrypt(encryptedMessage);
 
-Contact us for questions: [info@seccoco.com](mailto:info@seccoco.com)
 
 [snap]: https://oss.sonatype.org/content/repositories/snapshots/
